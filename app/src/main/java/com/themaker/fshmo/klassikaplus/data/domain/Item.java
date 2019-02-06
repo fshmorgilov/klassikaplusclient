@@ -3,6 +3,7 @@ package com.themaker.fshmo.klassikaplus.data.domain;
 public class Item {
 
     private String id;
+    private String extId;// TODO: 2/6/2019 add extId to DB
     private String name; //h1
     private String description; //ключевое описание
     private String vendorCode;
@@ -12,9 +13,22 @@ public class Item {
     private String icon;
     private String photo;
     private String manufacturer; //производитель
-    private double basePrice;
-    private double discount;
-    private double price;
+    private Double basePrice;
+    private Double discount;
+    private Boolean discountable;
+    private Double price;
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id='" + id + '\'' +
+                ", extId='" + extId + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", icon='" + icon + '\'' +
+                ", price='" + price + '\'' +
+                '}';
+    }
 
     public String getId() {
         return id;
@@ -96,7 +110,7 @@ public class Item {
         this.manufacturer = manufacturer;
     }
 
-    public double getBasePrice() {
+    public Double getBasePrice() {
         return basePrice;
     }
 
@@ -104,7 +118,7 @@ public class Item {
         this.basePrice = basePrice;
     }
 
-    public double getDiscount() {
+    public Double getDiscount() {
         return discount;
     }
 
@@ -112,12 +126,20 @@ public class Item {
         this.discount = discount;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Boolean getDiscountable() {
+        return discountable;
+    }
+
+    public void setDiscountable(Boolean discountable) {
+        this.discountable = discountable;
     }
 }
 

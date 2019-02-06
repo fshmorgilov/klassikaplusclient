@@ -1,5 +1,6 @@
 package com.themaker.fshmo.klassikaplus.presentation.novelties;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,31 +23,41 @@ class NoveltyViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.novelty_item_gotoshop)
     TextView goToShop;
     @BindView(R.id.novelty_item_novelty)
-    TextView noverlty;
+    TextView novelty;
 
     private View baseView;
+    private static final String TAG = NoveltyViewHolder.class.getName();
 
     public NoveltyViewHolder(View v) {
         super(v);
         this.baseView = v;
-        ButterKnife.bind(v);
+        ButterKnife.bind(this, v);
     }
 
     public void bind(@NonNull final Item item,
                      @NonNull RequestManager glide,
                      @NonNull NoveltyAdapter.OnItemClickListener onItemClickListener) {
-        price.setText(String.valueOf(item.getPrice()));
+        if (item.getPrice() != null)
+            price.setText(String.valueOf(item.getPrice()));
+        else
+            price.setVisibility(View.GONE);
         if (item.getName() != null)
             name.setText(item.getName());
         else
             name.setVisibility(View.GONE);
         if (item.getPageAlias() != null)
             goToShop.setVisibility(View.VISIBLE);
-        if (item.getNovelty())
-            noverlty.setVisibility(View.VISIBLE);
-        String url = item.getIcon();
-        glide.load(url)
-                .into(icon);
-        baseView.setOnClickListener(v -> onItemClickListener.onItemClick(item));
+        if (item.getNovelty() && item.getNovelty() != null)
+            novelty.setVisibility(View.VISIBLE);
+        if(!item.getIcon().isEmpty()) {
+            String url = item.getIcon();
+            glide.load(url)
+                    .into(icon);
+            baseView.setOnClickListener(v -> onItemClickListener.onItemClick(item));
+        }
+        else {
+            Log.i(TAG, "bind: setting default picture for view holder");
+            // TODO: 2/6/2019 placeholder image
+        };
     }
 }

@@ -26,25 +26,31 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    google()
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0-alpha01'
 
-    def butterknife_version = "9.0.0-rc2"
+    def butterknife_version = "10.0.0"
     def room_version = "2.1.0-alpha02"
     def moxy_version = "1.5.5"
+    def glide_version = "4.8.0"
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // AppCompan, RecycleView, CardView
     implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.1.0-alpha02'
     // image loading library Glide itself
-    implementation 'com.github.bumptech.glide:glide:4.6.1'
-    implementation 'com.google.android.material:material:1.1.0-alpha01'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
     // RXJava
     implementation "io.reactivex.rxjava2:rxjava:2.2.2"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
@@ -58,13 +64,14 @@ dependencies {
     //ROOM
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
-    /* Dagger2  */
-    implementation 'com.google.dagger:dagger-android:2.17'
-    implementation 'com.google.dagger:dagger-android-support:2.17'
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.17'
-
-    // optional - RxJava support for Room
+    // RxJava support for Room
     implementation 'androidx.room:room-rxjava2:2.1.0-alpha03'
+    /* Dagger2  */
+    implementation 'com.google.dagger:dagger-android:2.20'
+    implementation 'com.google.dagger:dagger-android-support:2.20'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.20'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.20'
+
     //ButterKnife
     implementation "com.jakewharton:butterknife:$butterknife_version"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
@@ -74,9 +81,9 @@ dependencies {
     implementation "android.arch.work:work-runtime:1.0.0-beta01"
     // Moxy
     implementation "com.arello-mobile:moxy:$moxy_version"
-    annotationProcessor "com.arello-mobile:moxy-compiler:$moxy_version"
     implementation "com.arello-mobile:moxy-android:$moxy_version"
     implementation "com.arello-mobile:moxy-app-compat:$moxy_version"
+    annotationProcessor "com.arello-mobile:moxy-compiler:$moxy_version"
     // Stetho
     api 'com.facebook.stetho:stetho-okhttp:1.5.0'
     implementation "androidx.core:core:1.1.0-alpha03"

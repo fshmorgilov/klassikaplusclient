@@ -5,7 +5,9 @@ import com.themaker.fshmo.klassikaplus.data.domain.Item;
 
 import java.util.List;
 
-public interface NoverltyView extends MvpView {
+public interface NoveltyView extends MvpView {
 
     void setDataset(List<Item> items);
+
+    void showError();
 }

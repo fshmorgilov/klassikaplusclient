@@ -16,6 +16,7 @@ public class NoveltyAdapter extends RecyclerView.Adapter<NoveltyViewHolder> {
     private List<Item> dataset;
     private OnItemClickListener onItemClickListener;
     private RequestManager glide;
+
     private static final String LTAG = NoveltyAdapter.class.getName();
 
     public interface OnItemClickListener {

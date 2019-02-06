@@ -14,7 +14,7 @@ import java.util.List;
 public interface ItemDao {
 
     @Query("SELECT * FROM ITEMS")
-    Flowable<List<DbItem>> getAll();
+    Single<List<DbItem>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<DbItem> items);

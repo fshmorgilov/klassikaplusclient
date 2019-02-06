@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="common_margin">8dp</dimen>
-    <dimen name="recycler_view_height">200dp</dimen>
+    <dimen name="novelty_recycler_height">300dp</dimen>
+    <dimen name="novelty_recycler_width">180dp</dimen>
+    <dimen name="common_padding">8dp</dimen>
 </resources>

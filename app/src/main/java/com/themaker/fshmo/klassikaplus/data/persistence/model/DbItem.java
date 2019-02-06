@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.List;
 
+// TODO: 1/30/2019 добавить галлерею
 @Entity(tableName = "items")
 public class DbItem {
 
@@ -15,6 +16,9 @@ public class DbItem {
     @ColumnInfo(name = "id")
     @NonNull
     private String id;
+
+    @ColumnInfo(name = "extId")
+    private String extId;
 
     @ColumnInfo(name = "name")
     private String name; //h1
@@ -65,9 +69,6 @@ public class DbItem {
     //photo
     @ColumnInfo(name = "icon")
     private String icon;
-
-    @Ignore
-    private String photo;
 
     //Characteristics
     @Ignore
@@ -232,18 +233,6 @@ public class DbItem {
         this.icon = icon;
     }
 
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public String getCountryManufacturer() {
-        return countryManufacturer;
-    }
-
     public void setCountryManufacturer(String countryManufacturer) {
         this.countryManufacturer = countryManufacturer;
     }
@@ -290,5 +279,14 @@ public class DbItem {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    @NonNull
+    public String getExtId() {
+        return extId;
+    }
+
+    public void setExtId(@NonNull String extId) {
+        this.extId = extId;
     }
 }

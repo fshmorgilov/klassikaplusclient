@@ -3,6 +3,7 @@ package com.themaker.fshmo.klassikaplus.presentation.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import io.reactivex.disposables.Disposable;
 public abstract class MvpBaseFragment extends MvpAppCompatFragment implements BackButtonListener, MvpView {
 
     protected View rootView;
+    protected int orientation;
 
 
     private Toast toast;
@@ -73,6 +75,11 @@ public abstract class MvpBaseFragment extends MvpAppCompatFragment implements Ba
      */
     protected boolean showBackButton() {
         return false;
+    }
+
+    protected boolean orientationPortrait() {
+        orientation = this.getResources().getConfiguration().orientation;
+        return orientation == Configuration.ORIENTATION_PORTRAIT;
     }
 
     @Override

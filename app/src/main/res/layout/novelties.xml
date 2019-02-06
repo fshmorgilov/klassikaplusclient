@@ -3,8 +3,8 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_height="@dimen/recycler_view_height"
-        android:layout_width="match_parent"
+        android:layout_height="@dimen/novelty_recycler_height"
+        android:layout_width="@dimen/novelty_recycler_width"
         android:layout_margin="@dimen/common_margin"
         app:cardElevation="4dp"
         >
@@ -12,50 +12,61 @@
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/border_item_background"
             >
 
         <ImageView
                 android:id="@+id/novelty_item_icon"
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
+                android:layout_margin="@dimen/common_margin"
                 tools:src="@tools:sample/avatars"
                 android:layout_alignParentLeft="true"
                 />
 
         <TextView
                 android:id="@+id/novelty_item_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/common_padding"
+                android:textAlignment="center"
                 android:lines="2"
-                tools:src="@tools:sample/cities"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@id/novelty_item_icon"
-                android:layout_toRightOf="@id/novelty_item_icon"
+                android:layout_below="@id/novelty_item_icon"
+                tools:src="@tools:sample/full_names"
                 />
 
         <TextView
                 android:id="@+id/novelty_item_price"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:background="@drawable/price_border"
+                android:padding="@dimen/common_padding"
+                android:textAlignment="textEnd"
                 tools:src="@tools:sample/cities"
                 android:layout_below="@id/novelty_item_name"
                 />
 
         <TextView
                 android:id="@+id/novelty_item_gotoshop"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="@dimen/common_padding"
                 tools:src="@tools:sample/cities"
                 android:visibility="gone"
                 android:layout_below="@id/novelty_item_price"
                 />
+
         <TextView
                 android:id="@+id/novelty_item_novelty"
+                android:layout_alignTop="@id/novelty_item_icon"
+                android:layout_margin="@dimen/common_margin"
+                tools:text="Новинка!"
                 android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
+
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
