@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
@@ -36,6 +37,7 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
     @InjectPresenter
     NoveltyPresenter presenter;
     MainActivityCallback callback;
+    ItemTouchHelper itemTouchHelper;
 
     private NoveltyAdapter noveltyAdapter;
 
@@ -45,6 +47,7 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
         glide = Glide.with(rootView);
         callback = (MainActivityCallback) getActivity();
         presenter.provideDataset();
+
         // FIXME: 2/25/2019 do not rerequest on back pressed
 
         noveltyAdapter = new NoveltyAdapter(
@@ -60,6 +63,10 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         GridSpaceItemDecoration decoration = new GridSpaceItemDecoration(1, 1);
         recycler.addItemDecoration(decoration);
+        NoveltySwipeController controller = new NoveltySwipeController();
+        itemTouchHelper = new ItemTouchHelper(controller);
+        itemTouchHelper.attachToRecyclerView(recycler);
+
     }
 
     @Override
