@@ -4,6 +4,7 @@ import android.app.Application;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.preference.PreferenceManager;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.themaker.fshmo.klassikaplus.data.preferences.Preferences;
@@ -42,6 +43,12 @@ public class ApplicationModule {
     @Singleton
     LocalBroadcastManager localBroadcastManager(Application application) {
         return LocalBroadcastManager.getInstance(application);
+    }
+
+    @Provides
+    @Singleton
+    Resources resources(Application application){
+        return application.getResources();
     }
 
     @Provides
