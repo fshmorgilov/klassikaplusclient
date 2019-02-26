@@ -17,7 +17,9 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
 
 
     private int swipeWidth;
+    private int swipeWidthThreshold;
     private boolean swipeBack;
+    private IndicatorState indicatorShowedState;
 
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
@@ -28,16 +30,18 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
 
     @Override
     public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-                            @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY,
+                            @NonNull RecyclerView.ViewHolder viewHolder,
+                            float dX, float dY,
                             int actionState, boolean isCurrentlyActive) {
-        swipeWidth = (int) recyclerView.getResources().getDimension(R.dimen.recycler_swipe_button_width);
-        if (actionState == ACTION_STATE_SWIPE)
-            setTouchListener(c, recyclerView, viewHolder, dX, dX, isCurrentlyActive);
-        if (dX < -swipeWidth - 20)
-            dX = -swipeWidth - 20;
-        if (dX > swipeWidth + 20)
-            dX = swipeWidth + 20;
         // TODO: 2/26/2019 resources bean
+        swipeWidth = (int) recyclerView.getResources().getDimension(R.dimen.recycler_swipe_button_width);
+        swipeWidthThreshold = (int) recyclerView.getResources().getDimension(R.dimen.recycler_swipe_treshold);
+        if (actionState == ACTION_STATE_SWIPE)
+            setTouchListener(c, recyclerView, viewHolder, dX, dY, isCurrentlyActive);
+        if (dX < -swipeWidth - swipeWidthThreshold)
+            dX = -swipeWidth - swipeWidthThreshold;
+        if (dX > swipeWidth + swipeWidthThreshold)
+            dX = swipeWidth + swipeWidthThreshold;
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 
@@ -55,13 +59,39 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                                       final RecyclerView recyclerView,
                                       final RecyclerView.ViewHolder viewHolder,
                                       final float dX, final float dY,
-                                      final int actionState, final boolean isCurrentlyActive) {
+                                      final int actionState,
+                                      final boolean isCurrentlyActive) {
         recyclerView.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-//                setTouchUpListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                setTouchUpListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }
             return false;
         });
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setTouchUpListener(final Canvas c,
+                                    final RecyclerView recyclerView,
+                                    final RecyclerView.ViewHolder viewHolder,
+                                    final float dX, final float dY,
+                                    final int actionState, final boolean isCurrentlyActive) {
+        recyclerView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                NoveltySwipeController.super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                recyclerView.setOnTouchListener((v1, event1) -> false);
+                setItemsClickable(recyclerView, true);
+                swipeBack = false;
+                indicatorShowedState = IndicatorState.GONE;
+            }
+            return false;
+        });
+    }
+
+    private void setItemsClickable(RecyclerView recyclerView,
+                                   boolean isClickable) {
+        for (int i = 0; i < recyclerView.getChildCount(); ++i) {
+            recyclerView.getChildAt(i).setClickable(isClickable);
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -72,13 +102,13 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
         recyclerView.setOnTouchListener((v, event) -> {
             swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
             if (swipeBack) {
-                IndicatorState indicatorShowedState = IndicatorState.GONE;
+                indicatorShowedState = IndicatorState.GONE;
                 if (dX < -swipeWidth)
                     indicatorShowedState = IndicatorState.RIGHT_VISIBLE;
                 else if (dX > swipeWidth)
                     indicatorShowedState = IndicatorState.LEFT_VISIBLE;
                 if (indicatorShowedState == IndicatorState.GONE) {
-//                    setTouchDownListener
+                    setTouchDownListener(c,recyclerView,holder,dX,dY,ACTION_STATE_SWIPE, isCurrentlyActive);
                 }
             }
             return false;
