@@ -9,14 +9,16 @@ import androidx.annotation.NonNull;
 
 public class SideButtonDrawer implements ButtonDrawer {
     @Override
-    public void drawButton(@NonNull Canvas canvas, @NonNull Paint paint, @NonNull View view) {
+    public RectF drawButton(@NonNull Canvas canvas,  @NonNull View view) {
         String favorite = "Избранное";
         int buttonWidthWithoutPadding = 30; // FIXME: 2/27/2019 inject
         int cornerRadius = 4;
+        Paint paint = new Paint();
         RectF button = new RectF(view.getLeft(), view.getTop(), view.getRight() + buttonWidthWithoutPadding, view.getBottom());
         paint.setColor(Color.YELLOW);
         canvas.drawRoundRect(button, cornerRadius, cornerRadius, paint);
         drawText(favorite, canvas, button);
+        return button;
     }
 
     private void drawText(@NonNull String text,

@@ -8,8 +8,7 @@ import androidx.annotation.NonNull;
 
 public interface ButtonDrawer {
 
-    void drawButton(@NonNull Canvas canvas,
-                    @NonNull Paint paint,
+    RectF drawButton(@NonNull Canvas canvas,
                     @NonNull View view);
 
 }

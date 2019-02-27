@@ -3,6 +3,7 @@ package com.themaker.fshmo.klassikaplus.presentation.novelties;
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -10,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.themaker.fshmo.klassikaplus.App;
 import com.themaker.fshmo.klassikaplus.R;
 import com.themaker.fshmo.klassikaplus.presentation.common.IndicatorState;
+import com.themaker.fshmo.klassikaplus.presentation.decoration.ButtonDrawer;
+import com.themaker.fshmo.klassikaplus.presentation.decoration.SideButtonDrawer;
 
 import javax.inject.Inject;
 
@@ -21,12 +24,17 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
     private int swipeWidthThreshold;
     private boolean swipeBack;
     private IndicatorState indicatorShowedState;
+    private final NoveltySwipeControllerActions actions;
+    private RecyclerView.ViewHolder currentItemViewHolder;
+    private ButtonDrawer drawer = new SideButtonDrawer();
+    private RectF button;
 
     @Inject
     Resources resources;
 
-    NoveltySwipeController() {
+    NoveltySwipeController(NoveltySwipeControllerActions actions) {
         super();
+        this.actions = actions;
         App.getInstance().getComponent().inject(this);
     }
 
@@ -44,6 +52,9 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                             int actionState, boolean isCurrentlyActive) {
         swipeWidth = (int) resources.getDimension(R.dimen.recycler_swipe_button_width);
         swipeWidthThreshold = (int) resources.getDimension(R.dimen.recycler_swipe_treshold);
+        currentItemViewHolder = viewHolder;
+        button = drawer.drawButton(canvas, viewHolder.itemView);
+
         if (actionState == ACTION_STATE_SWIPE)
             setTouchListener(canvas, recyclerView, viewHolder, dX, dY, isCurrentlyActive);
         handleSwipeDistances(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -61,22 +72,15 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
         super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 
-    @Override
-    public int convertToAbsoluteDirection(int flags, int layoutDirection) {
-        if (swipeBack) {
-            swipeBack = false;
-            return 0;
-        }
-        return super.convertToAbsoluteDirection(flags, layoutDirection);
-    }
-
+    /**Fixes a glitch that items may be clickable
+     * while moving */
     @SuppressLint("ClickableViewAccessibility")
-    private void setTouchAntiGlitch(final @NonNull Canvas canvas,
-                                    final @NonNull RecyclerView recyclerView,
-                                    final @NonNull RecyclerView.ViewHolder viewHolder,
-                                    final float dX, final float dY,
-                                    final int actionState,
-                                    final boolean isCurrentlyActive) {
+    private void setTouchUpAndDownHandler(final @NonNull Canvas canvas,
+                                          final @NonNull RecyclerView recyclerView,
+                                          final @NonNull RecyclerView.ViewHolder viewHolder,
+                                          final float dX, final float dY,
+                                          final int actionState,
+                                          final boolean isCurrentlyActive) {
         recyclerView.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_UP) {
                 NoveltySwipeController.super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
@@ -85,8 +89,24 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                 swipeBack = false;
                 indicatorShowedState = IndicatorState.GONE;
             }
+            if(actions != null && button != null
+                    && button.contains(event.getX(), event.getY())){
+                if(indicatorShowedState == IndicatorState.LEFT_VISIBLE)
+                    actions.onLeftClicked(viewHolder.getAdapterPosition());
+                if(indicatorShowedState == IndicatorState.RIGHT_VISIBLE)
+                    actions.onRightClicked(viewHolder.getAdapterPosition());
+            }
             return false;
         });
+    }
+
+    @Override
+    public int convertToAbsoluteDirection(int flags, int layoutDirection) {
+        if (swipeBack) {
+            swipeBack = false;
+            return 0;
+        }
+        return super.convertToAbsoluteDirection(flags, layoutDirection);
     }
 
     private void setRecyclerItemsClickable(@NonNull RecyclerView recyclerView,
@@ -105,14 +125,13 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
             swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
             if (swipeBack) {
                 indicatorShowedState = IndicatorState.GONE;
-                if (dX < -swipeWidth)
-                    indicatorShowedState = IndicatorState.RIGHT_VISIBLE;
-                else if (dX > swipeWidth)
-                    indicatorShowedState = IndicatorState.LEFT_VISIBLE;
+                if (dX < -swipeWidth) indicatorShowedState = IndicatorState.RIGHT_VISIBLE;
+                else if (dX > swipeWidth) indicatorShowedState = IndicatorState.LEFT_VISIBLE;
                 if (indicatorShowedState == IndicatorState.GONE) {
-                    setTouchAntiGlitch(c, recyclerView, holder, dX, dY, ACTION_STATE_SWIPE, isCurrentlyActive);
+                    setTouchUpAndDownHandler(c, recyclerView, holder, dX, dY, ACTION_STATE_SWIPE, isCurrentlyActive);
                     setRecyclerItemsClickable(recyclerView, false);
                 }
+
             }
             return false;
         });
