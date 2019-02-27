@@ -9,6 +9,6 @@ import androidx.annotation.NonNull;
 public interface ButtonDrawer {
 
     RectF drawButton(@NonNull Canvas canvas,
-                    @NonNull View view);
+                    @NonNull View view, boolean left);
 
 }

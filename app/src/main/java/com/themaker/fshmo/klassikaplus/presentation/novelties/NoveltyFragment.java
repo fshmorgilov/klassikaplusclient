@@ -61,8 +61,6 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
         noveltyAdapter.setDataset(dataset);
         recycler.setAdapter(noveltyAdapter);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        GridSpaceItemDecoration decoration = new GridSpaceItemDecoration(1, 1);
-        recycler.addItemDecoration(decoration);
         NoveltySwipeController controller = new NoveltySwipeController(new NoveltySwipeControllerActions() {
             @Override
             public void onLeftClicked(int viewHolderPosition) {
@@ -72,9 +70,10 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
             @Override
             public void onRightClicked(int viewHolderPosition) {
                 showToast("right clicked");
-
             }
         });
+        GridSpaceItemDecoration decoration = new GridSpaceItemDecoration(1, 1, controller);
+        recycler.addItemDecoration(decoration);
         itemTouchHelper = new ItemTouchHelper(controller);
         itemTouchHelper.attachToRecyclerView(recycler);
 

@@ -41,7 +41,7 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
                                 @NonNull RecyclerView.ViewHolder viewHolder) {
-        return makeMovementFlags(0, LEFT | RIGHT);
+        return makeMovementFlags(0,  RIGHT);
     }
 
     @Override
@@ -51,12 +51,13 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                             float dX, float dY,
                             int actionState, boolean isCurrentlyActive) {
         swipeWidth = (int) resources.getDimension(R.dimen.recycler_swipe_button_width);
-        swipeWidthThreshold = (int) resources.getDimension(R.dimen.recycler_swipe_treshold);
+        swipeWidthThreshold = (int) resources.getDimension(R.dimen.recycler_swipe_threshold);
         currentItemViewHolder = viewHolder;
-        button = drawer.drawButton(canvas, viewHolder.itemView);
 
         if (actionState == ACTION_STATE_SWIPE)
             setTouchListener(canvas, recyclerView, viewHolder, dX, dY, isCurrentlyActive);
+        button = drawer.drawButton(canvas, viewHolder.itemView, true);
+
         handleSwipeDistances(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 
@@ -65,39 +66,17 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                                       @NonNull RecyclerView.ViewHolder viewHolder,
                                       float dX, float dY,
                                       int actionState, boolean isCurrentlyActive) {
-        if (dX < -swipeWidth - swipeWidthThreshold)
-            dX = -swipeWidth - swipeWidthThreshold;
-        if (dX > swipeWidth + swipeWidthThreshold)
-            dX = swipeWidth + swipeWidthThreshold;
+        if (dX < -swipeWidth) {
+            indicatorShowedState = IndicatorState.LEFT_VISIBLE;
+            if (dX < -swipeWidth - swipeWidthThreshold)
+                dX = -swipeWidth - swipeWidthThreshold;
+        }
+        if (dX > swipeWidth) {
+            indicatorShowedState = IndicatorState.RIGHT_VISIBLE;
+            if (dX > swipeWidth + swipeWidthThreshold)
+                dX = swipeWidth + swipeWidthThreshold;
+        }
         super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-    }
-
-    /**Fixes a glitch that items may be clickable
-     * while moving */
-    @SuppressLint("ClickableViewAccessibility")
-    private void setTouchUpAndDownHandler(final @NonNull Canvas canvas,
-                                          final @NonNull RecyclerView recyclerView,
-                                          final @NonNull RecyclerView.ViewHolder viewHolder,
-                                          final float dX, final float dY,
-                                          final int actionState,
-                                          final boolean isCurrentlyActive) {
-        recyclerView.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_UP) {
-                NoveltySwipeController.super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-                recyclerView.setOnTouchListener((v1, event1) -> false);
-                setRecyclerItemsClickable(recyclerView, true);
-                swipeBack = false;
-                indicatorShowedState = IndicatorState.GONE;
-            }
-            if(actions != null && button != null
-                    && button.contains(event.getX(), event.getY())){
-                if(indicatorShowedState == IndicatorState.LEFT_VISIBLE)
-                    actions.onLeftClicked(viewHolder.getAdapterPosition());
-                if(indicatorShowedState == IndicatorState.RIGHT_VISIBLE)
-                    actions.onRightClicked(viewHolder.getAdapterPosition());
-            }
-            return false;
-        });
     }
 
     @Override
@@ -128,7 +107,6 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                 if (dX < -swipeWidth) indicatorShowedState = IndicatorState.RIGHT_VISIBLE;
                 else if (dX > swipeWidth) indicatorShowedState = IndicatorState.LEFT_VISIBLE;
                 if (indicatorShowedState == IndicatorState.GONE) {
-                    setTouchUpAndDownHandler(c, recyclerView, holder, dX, dY, ACTION_STATE_SWIPE, isCurrentlyActive);
                     setRecyclerItemsClickable(recyclerView, false);
                 }
 
@@ -147,5 +125,15 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder,
                          int direction) {
+    }
+
+    public void onDraw(Canvas canvas) {
+        if (currentItemViewHolder != null)
+            drawer.drawButton(canvas, currentItemViewHolder.itemView, false);
+    }
+
+    @Override
+    public float getSwipeEscapeVelocity(float defaultValue) {
+        return 0.1f * defaultValue;
     }
 }
