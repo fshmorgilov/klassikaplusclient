@@ -44,7 +44,6 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                             int actionState, boolean isCurrentlyActive) {
         swipeWidth = (int) resources.getDimension(R.dimen.recycler_swipe_button_width);
         swipeWidthThreshold = (int) resources.getDimension(R.dimen.recycler_swipe_treshold);
-        // TODO: 2/26/2019 resources bean
         if (actionState == ACTION_STATE_SWIPE)
             setTouchListener(canvas, recyclerView, viewHolder, dX, dY, isCurrentlyActive);
         handleSwipeDistances(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
