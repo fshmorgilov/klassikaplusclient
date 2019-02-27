@@ -63,7 +63,18 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         GridSpaceItemDecoration decoration = new GridSpaceItemDecoration(1, 1);
         recycler.addItemDecoration(decoration);
-        NoveltySwipeController controller = new NoveltySwipeController();
+        NoveltySwipeController controller = new NoveltySwipeController(new NoveltySwipeControllerActions() {
+            @Override
+            public void onLeftClicked(int viewHolderPosition) {
+                showToast("left clicked");
+            }
+
+            @Override
+            public void onRightClicked(int viewHolderPosition) {
+                showToast("right clicked");
+
+            }
+        });
         itemTouchHelper = new ItemTouchHelper(controller);
         itemTouchHelper.attachToRecyclerView(recycler);
 
