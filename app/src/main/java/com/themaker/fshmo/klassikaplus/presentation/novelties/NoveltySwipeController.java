@@ -46,6 +46,7 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
         return makeMovementFlags(0, RIGHT);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onChildDraw(@NonNull Canvas canvas,
                             @NonNull RecyclerView recyclerView,
@@ -55,12 +56,28 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
         swipeWidth = (int) resources.getDimension(R.dimen.recycler_swipe_button_width);
         swipeWidthThreshold = (int) resources.getDimension(R.dimen.recycler_swipe_threshold);
         currentItemViewHolder = viewHolder;
-
         if (actionState == ACTION_STATE_SWIPE) {
-            setTouchListener(canvas, recyclerView, viewHolder, dX, dY, isCurrentlyActive);
+            handleSwipeBack(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             button = drawer.drawButton(canvas, viewHolder.itemView, true);
+            if (swipeWidth <= dX && dX <= swipeWidth + swipeWidthThreshold) {
+                actions.onLeftClicked(viewHolder.getAdapterPosition());
+                button = drawer.drawButton(canvas, viewHolder.itemView, false);
+            }
+
         }
         handleSwipeDistances(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void handleSwipeBack(@NonNull Canvas canvas, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        recyclerView.setOnTouchListener((v, event) -> {
+            swipeBack = event.getAction() == MotionEvent.ACTION_DOWN
+                    || event.getAction() == MotionEvent.ACTION_UP
+                    || event.getAction() == MotionEvent.ACTION_CANCEL;
+            if (swipeBack)
+                super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            return false;
+        });
     }
 
     private void handleSwipeDistances(@NonNull Canvas canvas,
@@ -88,67 +105,6 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
             return 0;
         }
         return super.convertToAbsoluteDirection(flags, layoutDirection);
-    }
-
-    private void setRecyclerItemsClickable(@NonNull RecyclerView recyclerView,
-                                           boolean isClickable) {
-        for (int i = 0; i < recyclerView.getChildCount(); ++i) {
-            recyclerView.getChildAt(i).setClickable(isClickable);
-        }
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void setTouchListener(@NonNull Canvas c, @NonNull RecyclerView recyclerView,
-                                  @NonNull RecyclerView.ViewHolder holder,
-                                  float dX, float dY,
-                                  boolean isCurrentlyActive) {
-        recyclerView.setOnTouchListener((v, event) -> {
-            swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
-            if (swipeBack) {
-                sideButtonsState = SideButtonsState.GONE;
-                if (dX < -swipeWidth) sideButtonsState = SideButtonsState.RIGHT_VISIBLE;
-                else if (dX > swipeWidth) sideButtonsState = SideButtonsState.LEFT_VISIBLE;
-                if (sideButtonsState != SideButtonsState.GONE) {
-                    setRecyclerItemsClickable(recyclerView, false);
-                    setTouchDownListener(c, recyclerView, holder, dX, dY,
-                            ACTION_STATE_SWIPE, isCurrentlyActive);
-                }
-            }
-            return false;
-        });
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void setTouchDownListener(final Canvas c, final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder, final float dX, final float dY, final int actionState, final boolean isCurrentlyActive) {
-        recyclerView.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                setTouchUpListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            }
-            return false;
-        });
-    }
-
-    @SuppressLint("ClickableViewAccessibility")
-    private void setTouchUpListener(final Canvas c, final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder, final float dX, final float dY, final int actionState, final boolean isCurrentlyActive) {
-        recyclerView.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                NoveltySwipeController.super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-                recyclerView.setOnTouchListener((v1, event1) -> false);
-                setRecyclerItemsClickable(recyclerView, true);
-                swipeBack = false;
-
-                if (sideButtonsState != null && button != null && button.contains(event.getX(), event.getY())) {
-                    if (sideButtonsState == SideButtonsState.LEFT_VISIBLE) {
-                        actions.onLeftClicked(viewHolder.getAdapterPosition());
-                    } else if (sideButtonsState == SideButtonsState.RIGHT_VISIBLE) {
-                        actions.onRightClicked(viewHolder.getAdapterPosition());
-                    }
-                }
-                sideButtonsState = SideButtonsState.GONE;
-                currentItemViewHolder = null;
-            }
-            return false;
-        });
     }
 
     @Override

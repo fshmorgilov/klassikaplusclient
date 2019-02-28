@@ -19,7 +19,7 @@ public class SideButtonDrawer implements ButtonDrawer {
             button = new RectF(view.getLeft(), view.getTop(), view.getLeft() + buttonWidthWithoutPadding, view.getBottom());
             paint.setColor(Color.YELLOW);
         } else {
-            button = new RectF(view.getRight() - buttonWidthWithoutPadding, view.getTop(), view.getRight(), view.getBottom());
+            button = new RectF(view.getLeft(), view.getTop(), view.getLeft() + buttonWidthWithoutPadding, view.getBottom());
             paint.setColor(Color.RED);
             drawText(favorite, canvas, button);
         }
