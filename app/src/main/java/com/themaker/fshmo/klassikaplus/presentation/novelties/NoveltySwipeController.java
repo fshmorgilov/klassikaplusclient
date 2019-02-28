@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import com.themaker.fshmo.klassikaplus.App;
 import com.themaker.fshmo.klassikaplus.R;
-import com.themaker.fshmo.klassikaplus.presentation.common.IndicatorState;
+import com.themaker.fshmo.klassikaplus.presentation.common.SideButtonsState;
 import com.themaker.fshmo.klassikaplus.presentation.decoration.ButtonDrawer;
 import com.themaker.fshmo.klassikaplus.presentation.decoration.SideButtonDrawer;
 
@@ -20,12 +20,14 @@ import static androidx.recyclerview.widget.ItemTouchHelper.*;
 
 public class NoveltySwipeController extends ItemTouchHelper.Callback {
 
+    private final NoveltySwipeControllerActions actions;
+
     private int swipeWidth;
     private int swipeWidthThreshold;
     private boolean swipeBack;
-    private IndicatorState indicatorShowedState;
-    private final NoveltySwipeControllerActions actions;
+    private SideButtonsState sideButtonsState = SideButtonsState.GONE;
     private RecyclerView.ViewHolder currentItemViewHolder;
+
     private ButtonDrawer drawer = new SideButtonDrawer();
     private RectF button;
 
@@ -41,7 +43,7 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
     @Override
     public int getMovementFlags(@NonNull RecyclerView recyclerView,
                                 @NonNull RecyclerView.ViewHolder viewHolder) {
-        return makeMovementFlags(0,  RIGHT);
+        return makeMovementFlags(0, RIGHT);
     }
 
     @Override
@@ -54,10 +56,10 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
         swipeWidthThreshold = (int) resources.getDimension(R.dimen.recycler_swipe_threshold);
         currentItemViewHolder = viewHolder;
 
-        if (actionState == ACTION_STATE_SWIPE)
+        if (actionState == ACTION_STATE_SWIPE) {
             setTouchListener(canvas, recyclerView, viewHolder, dX, dY, isCurrentlyActive);
-        button = drawer.drawButton(canvas, viewHolder.itemView, true);
-
+            button = drawer.drawButton(canvas, viewHolder.itemView, true);
+        }
         handleSwipeDistances(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 
@@ -67,12 +69,12 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                                       float dX, float dY,
                                       int actionState, boolean isCurrentlyActive) {
         if (dX < -swipeWidth) {
-            indicatorShowedState = IndicatorState.LEFT_VISIBLE;
+            sideButtonsState = SideButtonsState.LEFT_VISIBLE;
             if (dX < -swipeWidth - swipeWidthThreshold)
                 dX = -swipeWidth - swipeWidthThreshold;
         }
         if (dX > swipeWidth) {
-            indicatorShowedState = IndicatorState.RIGHT_VISIBLE;
+            sideButtonsState = SideButtonsState.RIGHT_VISIBLE;
             if (dX > swipeWidth + swipeWidthThreshold)
                 dX = swipeWidth + swipeWidthThreshold;
         }
@@ -103,13 +105,47 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
         recyclerView.setOnTouchListener((v, event) -> {
             swipeBack = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
             if (swipeBack) {
-                indicatorShowedState = IndicatorState.GONE;
-                if (dX < -swipeWidth) indicatorShowedState = IndicatorState.RIGHT_VISIBLE;
-                else if (dX > swipeWidth) indicatorShowedState = IndicatorState.LEFT_VISIBLE;
-                if (indicatorShowedState == IndicatorState.GONE) {
+                sideButtonsState = SideButtonsState.GONE;
+                if (dX < -swipeWidth) sideButtonsState = SideButtonsState.RIGHT_VISIBLE;
+                else if (dX > swipeWidth) sideButtonsState = SideButtonsState.LEFT_VISIBLE;
+                if (sideButtonsState != SideButtonsState.GONE) {
                     setRecyclerItemsClickable(recyclerView, false);
+                    setTouchDownListener(c, recyclerView, holder, dX, dY,
+                            ACTION_STATE_SWIPE, isCurrentlyActive);
                 }
+            }
+            return false;
+        });
+    }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private void setTouchDownListener(final Canvas c, final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder, final float dX, final float dY, final int actionState, final boolean isCurrentlyActive) {
+        recyclerView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                setTouchUpListener(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+            return false;
+        });
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void setTouchUpListener(final Canvas c, final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder, final float dX, final float dY, final int actionState, final boolean isCurrentlyActive) {
+        recyclerView.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                NoveltySwipeController.super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+                recyclerView.setOnTouchListener((v1, event1) -> false);
+                setRecyclerItemsClickable(recyclerView, true);
+                swipeBack = false;
+
+                if (sideButtonsState != null && button != null && button.contains(event.getX(), event.getY())) {
+                    if (sideButtonsState == SideButtonsState.LEFT_VISIBLE) {
+                        actions.onLeftClicked(viewHolder.getAdapterPosition());
+                    } else if (sideButtonsState == SideButtonsState.RIGHT_VISIBLE) {
+                        actions.onRightClicked(viewHolder.getAdapterPosition());
+                    }
+                }
+                sideButtonsState = SideButtonsState.GONE;
+                currentItemViewHolder = null;
             }
             return false;
         });
