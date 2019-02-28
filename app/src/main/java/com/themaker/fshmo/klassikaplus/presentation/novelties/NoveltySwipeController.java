@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.MotionEvent;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -20,6 +21,7 @@ import static androidx.recyclerview.widget.ItemTouchHelper.*;
 
 public class NoveltySwipeController extends ItemTouchHelper.Callback {
 
+    private static final String TAG = NoveltySwipeController.class.getName();
     private final NoveltySwipeControllerActions actions;
 
     private int swipeWidth;
@@ -33,11 +35,18 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
 
     @Inject
     Resources resources;
+    private int swipeActionWidth;
 
     NoveltySwipeController(NoveltySwipeControllerActions actions) {
         super();
         this.actions = actions;
         App.getInstance().getComponent().inject(this);
+        initializeResources();
+    }
+
+    public void onDraw(Canvas canvas) {
+        if (currentItemViewHolder != null)
+            drawer.drawButton(canvas, currentItemViewHolder.itemView, false);
     }
 
     @Override
@@ -53,20 +62,25 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                             @NonNull RecyclerView.ViewHolder viewHolder,
                             float dX, float dY,
                             int actionState, boolean isCurrentlyActive) {
-        swipeWidth = (int) resources.getDimension(R.dimen.recycler_swipe_button_width);
-        swipeWidthThreshold = (int) resources.getDimension(R.dimen.recycler_swipe_threshold);
         currentItemViewHolder = viewHolder;
+        handleSwipeDistances(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         if (actionState == ACTION_STATE_SWIPE) {
             handleSwipeBack(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             button = drawer.drawButton(canvas, viewHolder.itemView, true);
-            if (swipeWidth <= dX && dX <= swipeWidth + swipeWidthThreshold) {
-                actions.onLeftClicked(viewHolder.getAdapterPosition());
-                button = drawer.drawButton(canvas, viewHolder.itemView, false);
-            }
-
         }
-        handleSwipeDistances(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
+
+    private void handleCallback(@NonNull Canvas canvas, @NonNull RecyclerView.ViewHolder viewHolder, float dX) {
+        if (swipeWidth <= dX) {
+            Log.w(TAG, "onChildDraw: current dX is :" + dX);
+            button = drawer.drawButton(canvas, viewHolder.itemView, false);
+            if (dX == swipeWidth + swipeWidthThreshold) {
+                actions.onLeftClicked(viewHolder.getAdapterPosition());
+                Log.d(TAG, "onChildDraw: callback triggered");
+            }
+        }
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     private void handleSwipeBack(@NonNull Canvas canvas, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
@@ -85,16 +99,11 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                                       @NonNull RecyclerView.ViewHolder viewHolder,
                                       float dX, float dY,
                                       int actionState, boolean isCurrentlyActive) {
-        if (dX < -swipeWidth) {
-            sideButtonsState = SideButtonsState.LEFT_VISIBLE;
-            if (dX < -swipeWidth - swipeWidthThreshold)
-                dX = -swipeWidth - swipeWidthThreshold;
-        }
-        if (dX > swipeWidth) {
-            sideButtonsState = SideButtonsState.RIGHT_VISIBLE;
-            if (dX > swipeWidth + swipeWidthThreshold)
-                dX = swipeWidth + swipeWidthThreshold;
-        }
+        if (dX <= -swipeWidth - swipeWidthThreshold)
+            dX = -swipeWidth - swipeWidthThreshold;
+        if (dX >= swipeWidth + swipeWidthThreshold)
+            dX = swipeWidth + swipeWidthThreshold;
+        handleCallback(canvas, viewHolder, dX);
         super.onChildDraw(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 
@@ -119,10 +128,13 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                          int direction) {
     }
 
-    public void onDraw(Canvas canvas) {
-        if (currentItemViewHolder != null)
-            drawer.drawButton(canvas, currentItemViewHolder.itemView, false);
+    private void initializeResources() {
+        swipeWidth = (int) resources.getDimension(R.dimen.recycler_swipe_button_width);
+        swipeActionWidth = (int) resources.getDimension(R.dimen.recycler_swipe_action_width);
+        swipeWidthThreshold = (int) resources.getDimension(R.dimen.recycler_swipe_threshold);
+        Log.d(TAG, "initializeResources: swipeWidth: " + swipeWidth + ", swipeActionWidth: " + swipeActionWidth + ", swipeThreshold: " + swipeWidthThreshold);
     }
+
 
     @Override
     public float getSwipeEscapeVelocity(float defaultValue) {
