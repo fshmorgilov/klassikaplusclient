@@ -7,6 +7,7 @@ import com.themaker.fshmo.klassikaplus.data.persistence.AppDatabase;
 import com.themaker.fshmo.klassikaplus.data.preferences.Preferences;
 import com.themaker.fshmo.klassikaplus.data.repositories.CatalogRepository;
 import com.themaker.fshmo.klassikaplus.data.web.catalog.CatalogApi;
+import com.themaker.fshmo.klassikaplus.presentation.decoration.StarDrawer;
 import com.themaker.fshmo.klassikaplus.presentation.novelties.NoveltyPresenter;
 import com.themaker.fshmo.klassikaplus.presentation.novelties.NoveltySwipeController;
 import com.themaker.fshmo.klassikaplus.presentation.root.MainActivity;
@@ -33,4 +34,5 @@ public interface AppComponent {
 
     void inject(NoveltySwipeController controller);
 
+    void inject(StarDrawer starDrawer);
 }

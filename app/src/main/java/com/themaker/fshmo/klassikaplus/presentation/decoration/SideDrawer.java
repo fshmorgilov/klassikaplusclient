@@ -6,9 +6,9 @@ import android.graphics.RectF;
 import android.view.View;
 import androidx.annotation.NonNull;
 
-public interface ButtonDrawer {
+public interface SideDrawer {
 
     RectF drawButton(@NonNull Canvas canvas,
-                    @NonNull View view, boolean left);
+                    @NonNull View view, boolean filled);
 
 }

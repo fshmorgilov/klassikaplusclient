@@ -19,6 +19,7 @@ public class Item implements Serializable {
     private Double discount;
     private Boolean discountable;
     private Double price;
+    private Boolean favorite;
 
     @Override
     public String toString() {
@@ -146,6 +147,14 @@ public class Item implements Serializable {
 
     public void setExtId(String extId) {
         this.extId = extId;
+    }
+
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
     }
 }
 
