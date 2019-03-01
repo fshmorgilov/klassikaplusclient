@@ -119,13 +119,13 @@ public abstract class MvpBaseFragment extends MvpAppCompatFragment implements Ba
 
     protected void showToast(String message) {
         if (toast != null) toast.cancel();
-        toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
+        toast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
         toast.show();
     }
 
     protected void showToast(int message) {
         if (toast != null) toast.cancel();
-        toast = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
+        toast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
         toast.show();
     }
 

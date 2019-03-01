@@ -27,18 +27,19 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
 
     private int swipeWidth;
     private int swipeWidthThreshold;
+    private int swipeActionWidth;
     private boolean swipeBack;
     private SideButtonsState sideButtonsState = SideButtonsState.GONE;
     private RecyclerView.ViewHolder currentItemViewHolder;
 
     private SideDrawer drawer = new StarDrawer();
-    private RectF button;
     private Item item;
 
     @Inject
     Resources resources;
-    private int swipeActionWidth;
 
+    // FIXME: 3/2/2019 Звезды видны пока скроллишь между vieholder
+    // FIXME: 3/2/2019 swipeback когда уже отмечено как favorite
     NoveltySwipeController(NoveltySwipeControllerActions actions) {
         super();
         this.actions = actions;
@@ -66,11 +67,9 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
                             int actionState, boolean isCurrentlyActive) {
         item = ((NoveltyViewHolder) viewHolder).getItem();
         currentItemViewHolder = viewHolder;
-        handleSwipeDistances(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         if (actionState == ACTION_STATE_SWIPE) {
-            //draw empty star if non favorite or draw filled star if favorite
             handleSwipeBack(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            drawer.draw(canvas, viewHolder.itemView, false);
+            handleSwipeDistances(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
         }
     }
 
@@ -100,13 +99,16 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
     }
 
     private void handleCallback(@NonNull Canvas canvas, @NonNull RecyclerView.ViewHolder viewHolder, float dX) {
-        if (swipeWidth <= dX) {
-            Log.d(TAG, "onChildDraw: current dX is :" + dX);
-            button = drawer.draw(canvas, viewHolder.itemView, false);
-            if (dX == swipeWidth + swipeWidthThreshold && !item.isFavorite()) {
-                drawer.draw(canvas, viewHolder.itemView, true);
-                actions.onLeftSwiped(viewHolder.getLayoutPosition());
-                Log.d(TAG, "onChildDraw: callback triggered");
+        if (item.isFavorite())
+            drawer.draw(canvas, viewHolder.itemView, true);
+        else {
+            if (swipeWidth <= dX) {
+                Log.d(TAG, "onChildDraw: current dX is :" + dX);
+                if (dX == swipeWidth + swipeWidthThreshold && !item.isFavorite()) {
+                    drawer.draw(canvas, viewHolder.itemView, true);
+                    actions.onLeftSwiped(viewHolder.getLayoutPosition());
+                    Log.d(TAG, "onChildDraw: callback triggered");
+                }
             }
         }
     }
