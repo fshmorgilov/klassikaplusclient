@@ -103,9 +103,9 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
         if (swipeWidth <= dX) {
             Log.d(TAG, "onChildDraw: current dX is :" + dX);
             button = drawer.draw(canvas, viewHolder.itemView, false);
-            if (dX == swipeWidth + swipeWidthThreshold && !item.getFavorite()) {
+            if (dX == swipeWidth + swipeWidthThreshold && !item.isFavorite()) {
                 drawer.draw(canvas, viewHolder.itemView, true);
-                actions.onLeftClicked(viewHolder.getAdapterPosition());
+                actions.onLeftSwiped(viewHolder.getLayoutPosition());
                 Log.d(TAG, "onChildDraw: callback triggered");
             }
         }

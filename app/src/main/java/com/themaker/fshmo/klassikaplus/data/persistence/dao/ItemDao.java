@@ -1,14 +1,13 @@
 package com.themaker.fshmo.klassikaplus.data.persistence.dao;
 
-import androidx.room.Dao;
-import androidx.room.Insert;
-import androidx.room.OnConflictStrategy;
-import androidx.room.Query;
+import androidx.room.*;
 import com.themaker.fshmo.klassikaplus.data.persistence.model.DbItem;
 import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 import java.util.List;
+
+import static androidx.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface ItemDao {
@@ -17,7 +16,7 @@ public interface ItemDao {
     Single<List<DbItem>> getAll();
     // TODO: 2/8/2019 Refactor to Flawable
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = REPLACE)
     void insertAll(List<DbItem> items);
 
     @Query("DELETE FROM ITEMS")
@@ -28,4 +27,7 @@ public interface ItemDao {
 
     @Query("SELECT * FROM ITEMS WHERE id in (:id)")
     Single<DbItem> findById(String id);
+
+    @Update(onConflict = REPLACE)
+    void updateById(String id);
 }

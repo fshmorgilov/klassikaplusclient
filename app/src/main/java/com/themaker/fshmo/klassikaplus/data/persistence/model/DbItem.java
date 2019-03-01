@@ -61,11 +61,13 @@ public class DbItem {
     @ColumnInfo(name = "keywords")
     private String keywords;
 
-    ////------additional_fields-----------////
-    //photo
     @ColumnInfo(name = "icon")
     private String icon;
 
+    @ColumnInfo(name = "favorite")
+    private boolean favorite;
+
+    ////------additional_fields-----------////
     //Characteristics
     @Ignore
     private String countryManufacturer; //Страна производитель
@@ -284,5 +286,13 @@ public class DbItem {
 
     public void setExtId(@NonNull String extId) {
         this.extId = extId;
+    }
+
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 }

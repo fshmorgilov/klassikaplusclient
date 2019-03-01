@@ -78,4 +78,8 @@ public class CatalogRepository extends BaseRepository {
                 .subscribeOn(Schedulers.io());
     }
 
+    public void makeItemFavorite(String itemId) {
+        db.itemDao().updateById(itemId);
+        Log.i(TAG, "makeItemFavorite: item with id " + itemId + " marked as favorite");
+    }
 }

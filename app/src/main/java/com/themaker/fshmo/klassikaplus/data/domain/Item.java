@@ -149,9 +149,8 @@ public class Item implements Serializable {
         this.extId = extId;
     }
 
-    public Boolean getFavorite() {
-        // FIXME: 3/1/2019 return favorite
-        return false;
+    public Boolean isFavorite() {
+        return favorite;
     }
 
     public void setFavorite(Boolean favorite) {

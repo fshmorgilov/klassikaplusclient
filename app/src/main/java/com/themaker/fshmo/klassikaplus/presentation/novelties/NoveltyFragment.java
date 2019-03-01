@@ -2,15 +2,12 @@ package com.themaker.fshmo.klassikaplus.presentation.novelties;
 
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
-import butterknife.BindViews;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -47,36 +44,30 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
         glide = Glide.with(rootView);
         callback = (MainActivityCallback) getActivity();
         presenter.provideDataset();
-
+        setupRecycler();
         // FIXME: 2/25/2019 do not rerequest on back pressed
+    }
 
-        noveltyAdapter = new NoveltyAdapter(
-                dataset,
-                glide,
-                item -> {
-                    Log.i(TAG, "onPostCreateView: item pressed: " + item.getId());
-                    callback.launchItemWebViewFragment(item);
-                }
-        );
+    private void setupRecycler() {
+        noveltyAdapter = new NoveltyAdapter(dataset, glide, item -> {
+            Log.i(TAG, "onPostCreateView: item pressed: " + item.getId());
+            callback.launchItemWebViewFragment(item);
+        });
         noveltyAdapter.setDataset(dataset);
         recycler.setAdapter(noveltyAdapter);
         recycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        NoveltySwipeController controller = new NoveltySwipeController(new NoveltySwipeControllerActions() {
-            @Override
-            public void onLeftClicked(int viewHolderPosition) {
-//                showToast("left clicked");
-            }
-
-            @Override
-            public void onRightClicked(int viewHolderPosition) {
-//                showToast("right clicked");
+        NoveltySwipeController controller = new NoveltySwipeController((viewHolderPosition) -> {
+            Item item = ((NoveltyViewHolder) recycler.findViewHolderForLayoutPosition(viewHolderPosition)).getItem();
+            if (item != null && !item.isFavorite()) {
+                presenter.makeItemFavorite(item, true);
+                item.setFavorite(true);
+                noveltyAdapter.notifyItemChanged(viewHolderPosition);
             }
         });
         GridSpaceItemDecoration decoration = new GridSpaceItemDecoration(1, 1, controller);
         recycler.addItemDecoration(decoration);
         itemTouchHelper = new ItemTouchHelper(controller);
         itemTouchHelper.attachToRecyclerView(recycler);
-
     }
 
     @Override

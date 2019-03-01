@@ -57,4 +57,7 @@ public class NoveltyPresenter extends MvpBasePresenter<NoveltyView> {
     }
 
 
+    void makeItemFavorite(String itemId) {
+        repository.makeItemFavorite(itemId);
+    }
 }
