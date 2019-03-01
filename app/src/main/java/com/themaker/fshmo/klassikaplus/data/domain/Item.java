@@ -150,7 +150,8 @@ public class Item implements Serializable {
     }
 
     public Boolean getFavorite() {
-        return favorite;
+        // FIXME: 3/1/2019 return favorite
+        return false;
     }
 
     public void setFavorite(Boolean favorite) {

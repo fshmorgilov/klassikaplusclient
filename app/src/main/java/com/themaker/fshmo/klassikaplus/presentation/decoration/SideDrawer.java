@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 
 public interface SideDrawer {
 
-    RectF drawButton(@NonNull Canvas canvas,
-                    @NonNull View view, boolean filled);
+    RectF draw(@NonNull Canvas canvas,
+               @NonNull View view, boolean filled);
 
 }

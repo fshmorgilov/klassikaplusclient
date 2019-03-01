@@ -48,7 +48,7 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
 
     public void onDraw(Canvas canvas) {
         if (currentItemViewHolder != null)
-            drawer.drawButton(canvas, currentItemViewHolder.itemView, false);
+            drawer.draw(canvas, currentItemViewHolder.itemView, false);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
         if (actionState == ACTION_STATE_SWIPE) {
             //draw empty star if non favorite or draw filled star if favorite
             handleSwipeBack(canvas, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
-            button = drawer.drawButton(canvas, viewHolder.itemView, true);
+            drawer.draw(canvas, viewHolder.itemView, false);
         }
     }
 
@@ -102,9 +102,9 @@ public class NoveltySwipeController extends ItemTouchHelper.Callback {
     private void handleCallback(@NonNull Canvas canvas, @NonNull RecyclerView.ViewHolder viewHolder, float dX) {
         if (swipeWidth <= dX) {
             Log.d(TAG, "onChildDraw: current dX is :" + dX);
-            button = drawer.drawButton(canvas, viewHolder.itemView, false);
+            button = drawer.draw(canvas, viewHolder.itemView, false);
             if (dX == swipeWidth + swipeWidthThreshold && !item.getFavorite()) {
-                //draw filled star
+                drawer.draw(canvas, viewHolder.itemView, true);
                 actions.onLeftClicked(viewHolder.getAdapterPosition());
                 Log.d(TAG, "onChildDraw: callback triggered");
             }

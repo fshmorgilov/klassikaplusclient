@@ -64,12 +64,12 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
         NoveltySwipeController controller = new NoveltySwipeController(new NoveltySwipeControllerActions() {
             @Override
             public void onLeftClicked(int viewHolderPosition) {
-                showToast("left clicked");
+//                showToast("left clicked");
             }
 
             @Override
             public void onRightClicked(int viewHolderPosition) {
-                showToast("right clicked");
+//                showToast("right clicked");
             }
         });
         GridSpaceItemDecoration decoration = new GridSpaceItemDecoration(1, 1, controller);
