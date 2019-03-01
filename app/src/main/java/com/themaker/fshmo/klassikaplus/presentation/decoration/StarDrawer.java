@@ -35,9 +35,10 @@ public class StarDrawer implements SideDrawer {
 
     @Override
     public RectF draw(@NonNull Canvas canvas, @NonNull View view, boolean filled) {
-        int top = ((view.getBottom() - view.getTop()) / 2) + (swipeWidth + swipeWidthThreshold) / 2;
-        int bottom = ((view.getBottom() - view.getTop()) / 2) - (swipeWidth + swipeWidthThreshold) / 2;
-        Log.d(TAG, "StarDrawer: view top: " + view.getTop() + ", view bottom: " +view.getBottom());
+        int top = ((view.getBottom() - view.getTop()) / 2) - (swipeWidth + swipeWidthThreshold) / 2;
+        int bottom = ((view.getBottom() - view.getTop()) / 2) + (swipeWidth + swipeWidthThreshold) / 2;
+        Log.d(TAG, "StarDrawer: view top: " + view.getTop() + ", view bottom: " + view.getBottom());
+        Log.d(TAG, "draw: swipewidth & threshold: " + swipeWidth + swipeWidthThreshold);
         if (filled) {
             filledStar.setBounds(view.getLeft(), top, view.getLeft() + swipeWidth + swipeWidthThreshold, bottom);
             filledStar.draw(canvas);
