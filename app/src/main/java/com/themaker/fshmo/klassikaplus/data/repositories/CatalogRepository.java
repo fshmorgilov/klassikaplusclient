@@ -8,16 +8,17 @@ import com.themaker.fshmo.klassikaplus.data.mappers.DtoToDbItemMapper;
 import com.themaker.fshmo.klassikaplus.data.mappers.ListMapping;
 import com.themaker.fshmo.klassikaplus.data.persistence.AppDatabase;
 import com.themaker.fshmo.klassikaplus.data.persistence.model.DbItem;
-import com.themaker.fshmo.klassikaplus.data.repositories.filters.NoveltinessFilter;
 import com.themaker.fshmo.klassikaplus.data.web.catalog.CatalogApi;
 import com.themaker.fshmo.klassikaplus.data.web.dto.catalog.DataDto;
 import com.themaker.fshmo.klassikaplus.data.web.dto.catalog.ItemDto;
 import com.themaker.fshmo.klassikaplus.data.web.dto.catalog.ResponseDto;
 import io.reactivex.Single;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 public class CatalogRepository extends BaseRepository {
 
@@ -27,6 +28,8 @@ public class CatalogRepository extends BaseRepository {
     AppDatabase db;
     @Inject
     CatalogApi api;
+    @Inject
+    Executor executor;
 
     private ListMapping<DbItem, Item> dbItemDomainMapper = new ListMapping<>(new DbToDomainMapper());
     private ListMapping<ItemDto, DbItem> itemDtoDbItemMapper = new ListMapping<>(new DtoToDbItemMapper());
@@ -78,8 +81,18 @@ public class CatalogRepository extends BaseRepository {
                 .subscribeOn(Schedulers.io());
     }
 
-    public void makeItemFavorite(String itemId) {
-        db.itemDao().updateById(itemId);
-        Log.i(TAG, "makeItemFavorite: item with id " + itemId + " marked as favorite");
+    public void makeItemFavorite(String itemId, boolean favorite) {
+        Disposable disposable = db.itemDao().findById(itemId)
+                .subscribeOn(Schedulers.io())
+                .subscribe(dbItem -> {
+                            dbItem.setFavorite(favorite);
+                            db.itemDao().update(dbItem);
+                            Log.i(TAG, "makeItemFavorite: item with id " + itemId + " marked as favorite");
+                        },
+                        throwable -> {
+                            if (throwable instanceof Exception)
+                                Log.e(TAG, "makeItemFavorite: " + ((Exception) throwable).getMessage());
+                        }
+                );
     }
 }

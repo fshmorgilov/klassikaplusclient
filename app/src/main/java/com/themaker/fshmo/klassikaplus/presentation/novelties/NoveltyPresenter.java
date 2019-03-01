@@ -1,8 +1,6 @@
 package com.themaker.fshmo.klassikaplus.presentation.novelties;
 
 import android.util.Log;
-import android.view.View;
-import butterknife.ButterKnife;
 import com.arellomobile.mvp.InjectViewState;
 import com.themaker.fshmo.klassikaplus.App;
 import com.themaker.fshmo.klassikaplus.data.domain.Item;
@@ -23,10 +21,9 @@ public class NoveltyPresenter extends MvpBasePresenter<NoveltyView> {
     @Inject
     CatalogRepository repository;
 
-    NoveltyPresenter(){
+    NoveltyPresenter() {
         App.getInstance().getComponent().inject(this);
     }
-
 
     void provideDataset() {
         getViewState().showState(State.Loading);
@@ -39,7 +36,6 @@ public class NoveltyPresenter extends MvpBasePresenter<NoveltyView> {
                         this::displayError);
         getViewState().addSub(subscribe);   // FIXME: 2/7/2019 возможно, не стоит
     }
-
 
     private void displayError(Throwable throwable) {
         logError(throwable);
@@ -58,6 +54,6 @@ public class NoveltyPresenter extends MvpBasePresenter<NoveltyView> {
 
 
     void makeItemFavorite(String itemId) {
-        repository.makeItemFavorite(itemId);
+        repository.makeItemFavorite(itemId, true);
     }
 }

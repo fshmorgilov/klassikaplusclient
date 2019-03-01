@@ -12,6 +12,8 @@ import dagger.Module;
 import dagger.Provides;
 
 import javax.inject.Singleton;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 @Module
 public class ApplicationModule {
@@ -43,6 +45,12 @@ public class ApplicationModule {
     @Singleton
     LocalBroadcastManager localBroadcastManager(Application application) {
         return LocalBroadcastManager.getInstance(application);
+    }
+
+    @Provides
+    @Singleton
+    Executor simpleExecutor(){
+        return Executors.newFixedThreadPool(2);
     }
 
     @Provides

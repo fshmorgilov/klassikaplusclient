@@ -29,5 +29,5 @@ public interface ItemDao {
     Single<DbItem> findById(String id);
 
     @Update(onConflict = REPLACE)
-    void updateById(String id);
+    void update(DbItem item);
 }

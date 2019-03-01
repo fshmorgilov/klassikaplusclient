@@ -59,7 +59,7 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
         NoveltySwipeController controller = new NoveltySwipeController((viewHolderPosition) -> {
             Item item = ((NoveltyViewHolder) recycler.findViewHolderForLayoutPosition(viewHolderPosition)).getItem();
             if (item != null && !item.isFavorite()) {
-                presenter.makeItemFavorite(item, true);
+                presenter.makeItemFavorite(item.getId());
                 item.setFavorite(true);
                 noveltyAdapter.notifyItemChanged(viewHolderPosition);
             }
