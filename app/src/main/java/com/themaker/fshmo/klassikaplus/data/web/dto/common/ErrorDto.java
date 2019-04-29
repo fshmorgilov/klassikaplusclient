@@ -1,4 +1,4 @@
-package com.themaker.fshmo.klassikaplus.data.web.dto;
+package com.themaker.fshmo.klassikaplus.data.web.dto.common;
 
 import java.io.Serializable;
 import com.google.gson.annotations.Expose;

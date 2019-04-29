@@ -4,9 +4,9 @@ import android.util.Log;
 import com.themaker.fshmo.klassikaplus.data.domain.Item;
 import com.themaker.fshmo.klassikaplus.data.persistence.model.DbItem;
 
-public class DbToDomainMapper extends Mapping<DbItem, Item> {
+public class DbToDomainItemMapper extends Mapping<DbItem, Item> {
 
-    private static final String TAG = DbToDomainMapper.class.getName();
+    private static final String TAG = DbToDomainItemMapper.class.getName();
 
     @Override
     public Item map(DbItem dbItem) {
@@ -18,6 +18,7 @@ public class DbToDomainMapper extends Mapping<DbItem, Item> {
         item.setName(dbItem.getName());
         item.setNovelty(dbItem.getNovelty());
         item.setPageAlias(dbItem.getPageAlias());
+        item.setCategory(dbItem.getCategory());
         Log.d(TAG, "map: Item parsed: " + item.toString());
         return item;
     }

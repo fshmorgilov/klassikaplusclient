@@ -1,9 +1,8 @@
 package com.themaker.fshmo.klassikaplus.presentation.novelties;
 
 import android.util.Log;
-import android.view.View;
-import butterknife.ButterKnife;
 import com.arellomobile.mvp.InjectViewState;
+import com.themaker.fshmo.klassikaplus.App;
 import com.themaker.fshmo.klassikaplus.data.domain.Item;
 import com.themaker.fshmo.klassikaplus.data.repositories.CatalogRepository;
 import com.themaker.fshmo.klassikaplus.presentation.base.MvpBasePresenter;
@@ -11,16 +10,21 @@ import com.themaker.fshmo.klassikaplus.presentation.common.State;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
+import javax.inject.Inject;
 import java.util.List;
 
 @InjectViewState
 public class NoveltyPresenter extends MvpBasePresenter<NoveltyView> {
 
     private static final String TAG = NoveltyPresenter.class.getName();
+    // TODO: 4/26/2019 Refactor to holdData
+    @Inject
+    CatalogRepository repository;
 
-    // TODO: 2/7/2019 inject
-    //    @Inject
-    CatalogRepository repository = CatalogRepository.getInstance();
+    NoveltyPresenter(){
+        App.getInstance().getComponent().inject(this);
+    }
+
 
     void provideDataset() {
         getViewState().showState(State.Loading);
@@ -31,7 +35,7 @@ public class NoveltyPresenter extends MvpBasePresenter<NoveltyView> {
                 .subscribe(
                         this::displayData,
                         this::displayError);
-        getViewState().addSub(subscribe);   // FIXME: 2/7/2019 возможно, не стоит
+        getViewState().addSub(subscribe);
     }
 
 

@@ -1,0 +1,28 @@
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/error_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+    <TextView
+            android:id="@+id/error"
+            android:layout_marginTop="@dimen/common_margin"
+            android:text="@string/novelty_error_no_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            />
+
+    <TextView
+            android:id="@+id/error_refresh_btn"
+            android:layout_marginTop="@dimen/common_margin"
+            android:layout_gravity="center"
+            android:text="@string/refresh"
+            android:layout_width="96dp"
+            android:layout_height="40dp"
+            style="@style/common_button"
+            />
+
+</LinearLayout>

@@ -13,6 +13,7 @@ import com.themaker.fshmo.klassikaplus.data.domain.Item;
 import java.util.List;
 
 public class NoveltyAdapter extends RecyclerView.Adapter<NoveltyViewHolder> {
+
     private List<Item> dataset;
     private OnItemClickListener onItemClickListener;
     private RequestManager glide;

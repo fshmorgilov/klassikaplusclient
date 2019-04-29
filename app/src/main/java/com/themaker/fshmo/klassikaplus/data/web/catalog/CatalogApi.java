@@ -10,13 +10,15 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public final class CatalogApi { // TODO: 1/16/2019 refactor to bean
+public final class CatalogApi {
 
-    private static final String url = "http://192.168.0.4:63000/catalog/";
+    private static final String url_dev = "http://192.168.0.4:63000/";
+    private static final String url_test = "https://klassikaplus-test.herokuapp.com/";
 
     private static final int TIMEOUT_SECONDS = 2;
 
-    private final CatalogEndpoint endpoint;
+    private final CatalogEndpoint catalogEndpoint;
+    private final RevisionEndpoint revisionEndpoint;
     private final OkHttpClient client;
 
     private static CatalogApi api;
@@ -32,13 +34,14 @@ public final class CatalogApi { // TODO: 1/16/2019 refactor to bean
         final Retrofit retrofit;
         client = buildOkHttpClient();
         retrofit = buildRetrofit();
-        endpoint = retrofit.create(CatalogEndpoint.class);
+        catalogEndpoint = retrofit.create(CatalogEndpoint.class);
+        revisionEndpoint = retrofit.create(RevisionEndpoint.class);
     }
 
     @NonNull
     private Retrofit buildRetrofit() {
         return new Retrofit.Builder()
-                .baseUrl(url)
+                .baseUrl(url_test)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -48,7 +51,7 @@ public final class CatalogApi { // TODO: 1/16/2019 refactor to bean
     @NonNull
     private OkHttpClient buildOkHttpClient() {
         final HttpLoggingInterceptor networkLoggingInterceptor = new HttpLoggingInterceptor();
-        networkLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+        networkLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         return new OkHttpClient.Builder()
                 .addInterceptor(networkLoggingInterceptor)
@@ -59,7 +62,11 @@ public final class CatalogApi { // TODO: 1/16/2019 refactor to bean
     }
 
     public CatalogEndpoint catalog() {
-        return endpoint;
+        return catalogEndpoint;
+    }
+
+    public RevisionEndpoint revision(){
+        return revisionEndpoint;
     }
 
 }

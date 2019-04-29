@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
+apply plugin: 'kotlin-kapt'
+
 apply plugin: 'kotlin-android-extensions'
 
 android {
@@ -40,6 +42,7 @@ dependencies {
     def room_version = "2.1.0-alpha02"
     def moxy_version = "1.5.5"
     def glide_version = "4.8.0"
+    def daggerVer = "2.20" // or latest version
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     // AppCompan, RecycleView, CardView
@@ -48,9 +51,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.1.0-alpha02'
+    implementation 'com.android.support:design:28.0.0'
     // image loading library Glide itself
     implementation "com.github.bumptech.glide:glide:$glide_version"
-    annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
     // RXJava
     implementation "io.reactivex.rxjava2:rxjava:2.2.2"
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
@@ -63,18 +67,18 @@ dependencies {
     api "com.squareup.retrofit2:converter-gson:2.4.0"
     //ROOM
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
     // RxJava support for Room
     implementation 'androidx.room:room-rxjava2:2.1.0-alpha03'
     /* Dagger2  */
-    implementation 'com.google.dagger:dagger-android:2.20'
-    implementation 'com.google.dagger:dagger-android-support:2.20'
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.20'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.20'
 
+    implementation "com.google.dagger:dagger:$daggerVer"
+    implementation "com.google.dagger:dagger-android-support:$daggerVer"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVer"
+    kapt "com.google.dagger:dagger-compiler:$daggerVer"
     //ButterKnife
     implementation "com.jakewharton:butterknife:$butterknife_version"
-    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknife_version"
+    kapt "com.jakewharton:butterknife-compiler:$butterknife_version"
     // Stetho core
     api 'com.facebook.stetho:stetho:1.5.0'
     //Work Manager
@@ -83,7 +87,7 @@ dependencies {
     implementation "com.arello-mobile:moxy:$moxy_version"
     implementation "com.arello-mobile:moxy-android:$moxy_version"
     implementation "com.arello-mobile:moxy-app-compat:$moxy_version"
-    annotationProcessor "com.arello-mobile:moxy-compiler:$moxy_version"
+    kapt "com.arello-mobile:moxy-compiler:$moxy_version"
     // Stetho
     api 'com.facebook.stetho:stetho-okhttp:1.5.0'
     implementation "androidx.core:core:1.1.0-alpha03"

@@ -7,4 +7,6 @@
     <dimen name="card_corner_radius">4dp</dimen>
     <dimen name="items_name_text_size">20sp</dimen>
     <dimen name="item_price_text_size">20sp</dimen>
+    <dimen name="toolbar_height">32dp</dimen>
+    <dimen name="common_button_text">16sp</dimen>
 </resources>

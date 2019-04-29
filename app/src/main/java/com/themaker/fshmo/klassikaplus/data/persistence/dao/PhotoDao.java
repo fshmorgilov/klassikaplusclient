@@ -14,7 +14,6 @@ public interface PhotoDao {
 
     @Query("SELECT * FROM photos")
     Single<List<DbPhoto>> getAll();
-    // TODO: 2/8/2019 Refactor to Flawable
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<DbPhoto> items);

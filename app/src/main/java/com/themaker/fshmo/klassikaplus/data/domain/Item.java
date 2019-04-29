@@ -19,6 +19,8 @@ public class Item implements Serializable {
     private Double discount;
     private Boolean discountable;
     private Double price;
+    private String category;
+    private Integer categoryId;
 
     @Override
     public String toString() {
@@ -146,6 +148,22 @@ public class Item implements Serializable {
 
     public void setExtId(String extId) {
         this.extId = extId;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 }
 

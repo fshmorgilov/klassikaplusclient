@@ -5,7 +5,6 @@ import androidx.room.*;
 
 import java.util.List;
 
-// TODO: 1/30/2019 добавить галлерею
 @Entity(tableName = "items")
 public class DbItem {
 
@@ -44,7 +43,7 @@ public class DbItem {
     @ColumnInfo(name = "page_alias")
     private String pageAlias;
 
-    @ColumnInfo(name = "template") //todo шаблон отображения для сайта, возможно мне не нужен
+    @ColumnInfo(name = "template")
     private String template;
 
     @ColumnInfo(name = "menu_item_name")
@@ -67,6 +66,11 @@ public class DbItem {
     @ColumnInfo(name = "icon")
     private String icon;
 
+    @ColumnInfo (name = "category")
+    private String category;
+
+    @ColumnInfo (name = "category_id")
+    private Integer categoryId;
     //Characteristics
     @Ignore
     private String countryManufacturer; //Страна производитель
@@ -285,5 +289,21 @@ public class DbItem {
 
     public void setExtId(@NonNull String extId) {
         this.extId = extId;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 }

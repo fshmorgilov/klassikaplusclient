@@ -3,4 +3,13 @@
     <string name="novelty_error_no_date">Простите, но на данный момент сервис не доступен</string>
     <string name="novelties">Новинки</string>
     <string name="item_name_template">Костюм с юбкой Szanel Czerwony</string>
+    <string name="collection_is_updated">Коллекция обновлена</string>
+    <string name="refresh">Обновить</string>
+    <string name="category_selection">Выбор категории</string>
+    <string name="about">О компании</string>
+    <string name="catalog">Каталог</string>
+    <string name="company_title">Классика+</string>
+    <string name="choose_category">Выберите категорию:</string>
+    <string name="ok">Ок</string>
+    <string name="cancel">Отмена</string>
 </resources>

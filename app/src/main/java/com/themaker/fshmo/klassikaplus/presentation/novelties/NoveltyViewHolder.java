@@ -54,6 +54,6 @@ class NoveltyViewHolder extends RecyclerView.ViewHolder {
         else {
             Log.i(TAG, "bind: setting default picture for view holder");
             // TODO: 2/6/2019 placeholder image
-        };
+        }
     }
 }

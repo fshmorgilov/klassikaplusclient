@@ -12,7 +12,6 @@ import androidx.room.PrimaryKey;
                 childColumns = "item_id",
                 onDelete = ForeignKey.CASCADE,
                 onUpdate = ForeignKey.CASCADE))
-// TODO: 2/8/2019 провязать таблицу
 public class DbPhoto {
 
     @PrimaryKey
