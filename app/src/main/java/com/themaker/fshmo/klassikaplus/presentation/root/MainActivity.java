@@ -62,8 +62,7 @@ public class MainActivity extends MvpAppCompatActivity
         NavigationView navigationView = findViewById(R.id.main_navigation);
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         preferences.setFirstTimeAppLaunch();
-        Boolean startWithNovelty = getIntent().getExtras().getBoolean(START_WITH_NOVELTY_EXTRA);
-        if (startWithNovelty != null && startWithNovelty)
+        if (getIntent().getBooleanExtra(START_WITH_NOVELTY_EXTRA, false))
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.main_frame, new NoveltyFragment())
                     .addToBackStack(NOVELTY_TAG)
