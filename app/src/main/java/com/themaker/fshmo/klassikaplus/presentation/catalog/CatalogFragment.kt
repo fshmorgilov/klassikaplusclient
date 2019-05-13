@@ -74,10 +74,11 @@ class CatalogFragment : MvpBaseFragment(), CatalogView {
         setHasOptionsMenu(true)
         (activity as AppCompatActivity).setSupportActionBar(toolbar)
         val actionBar: ActionBar? = (activity as AppCompatActivity).supportActionBar
-        toolbar.title = rootView.resources.getString(R.string.catalog)
         with(actionBar) {
             this?.setDisplayHomeAsUpEnabled(true)
             this?.setHomeAsUpIndicator(R.drawable.ic_menu)
+            this?.title = rootView.resources.getString(R.string.catalog)
+            this?.setDisplayShowTitleEnabled(true)
         }
     }
 

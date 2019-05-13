@@ -82,6 +82,8 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
             ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
             ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
             if (actionBar != null) {
+                actionBar.setDisplayShowTitleEnabled(true);
+                actionBar.setTitle(R.string.novelties);
                 actionBar.setDisplayHomeAsUpEnabled(true);
                 actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
             }
