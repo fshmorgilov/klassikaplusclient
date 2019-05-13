@@ -35,12 +35,20 @@ public class MainActivity extends MvpAppCompatActivity
 
     private DrawerLayout drawerLayout;
 
-    private static final String WEBVIEW_TAG = "ItemWebView";
+    private static final String WEBVIEW_TAG = "ItemWebViewFragment";
     private static final String NOVELTY_TAG = "NoveltyFragment";
+    private static final String CATALOG_TAG = "CatalogFragment";
+    private static final String START_WITH_NOVELTY_EXTRA = "startwithNovelty";
 
     public static void start(Context context) {
         Intent intent = new Intent(context, MainActivity.class);
         context.startActivity(intent);
+    }
+
+    public static Intent startWithNovelties(Context context) {
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.putExtra(START_WITH_NOVELTY_EXTRA, true);
+        return intent;
     }
 
     @Override
@@ -54,10 +62,17 @@ public class MainActivity extends MvpAppCompatActivity
         NavigationView navigationView = findViewById(R.id.main_navigation);
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
         preferences.setFirstTimeAppLaunch();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_frame, new NoveltyFragment())
-                .addToBackStack(NOVELTY_TAG)
-                .commit();
+        Boolean startWithNovelty = getIntent().getExtras().getBoolean(START_WITH_NOVELTY_EXTRA);
+        if (startWithNovelty != null && startWithNovelty)
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_frame, new NoveltyFragment())
+                    .addToBackStack(NOVELTY_TAG)
+                    .commit();
+        else
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_frame, new CatalogFragment())
+                    .addToBackStack(CATALOG_TAG)
+                    .commit();
     }
 
     @Override
