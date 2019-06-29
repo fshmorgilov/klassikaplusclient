@@ -13,6 +13,7 @@ import com.themaker.fshmo.klassikaplus.data.web.dto.catalog.items.DataDto;
 import com.themaker.fshmo.klassikaplus.data.web.dto.catalog.items.ItemDto;
 import com.themaker.fshmo.klassikaplus.data.web.dto.catalog.items.ResponseDto;
 import io.reactivex.Flowable;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 import javax.inject.Inject;

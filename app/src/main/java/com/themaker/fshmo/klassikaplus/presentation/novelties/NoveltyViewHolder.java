@@ -48,7 +48,7 @@ class NoveltyViewHolder extends RecyclerView.ViewHolder {
 //            goToShop.setVisibility(View.VISIBLE);
 //        if (item.getNovelty() && item.getNovelty() != null)
 //            novelty.setVisibility(View.VISIBLE);
-        if(!item.getIcon().isEmpty()) {
+        if (!item.getIcon().isEmpty()) {
             String url = item.getIcon();
             glide.load(url)
                     .into(icon);
@@ -61,6 +61,6 @@ class NoveltyViewHolder extends RecyclerView.ViewHolder {
 
     public Item getItem() {
         return item;
-        }
     }
 }
+

@@ -20,7 +20,7 @@ import com.themaker.fshmo.klassikaplus.R;
 import com.themaker.fshmo.klassikaplus.data.domain.Item;
 import com.themaker.fshmo.klassikaplus.presentation.base.MvpBaseFragment;
 import com.themaker.fshmo.klassikaplus.presentation.common.State;
-import com.themaker.fshmo.klassikaplus.presentation.decoration.GridSpaceItemDecoration;
+import com.themaker.fshmo.klassikaplus.presentation.decoration.SwipedGridSpaceItemDecoration;
 import com.themaker.fshmo.klassikaplus.presentation.root.MainNavigationCallback;
 import com.themaker.fshmo.klassikaplus.presentation.root.WebItemCallback;
 import io.reactivex.disposables.Disposable;
@@ -43,7 +43,6 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
 
     @InjectPresenter
     NoveltyPresenter presenter;
-    MainActivityCallback callback;
     ItemTouchHelper itemTouchHelper;
 
     private NoveltyAdapter noveltyAdapter;
@@ -81,7 +80,7 @@ public class NoveltyFragment extends MvpBaseFragment implements NoveltyView {
                 noveltyAdapter.notifyItemChanged(viewHolderPosition);
             }
         });
-        GridSpaceItemDecoration decoration = new GridSpaceItemDecoration(1, 1, controller);
+        SwipedGridSpaceItemDecoration decoration = new SwipedGridSpaceItemDecoration(1, 1, controller);
         recycler.addItemDecoration(decoration);
         itemTouchHelper = new ItemTouchHelper(controller);
         itemTouchHelper.attachToRecyclerView(recycler);

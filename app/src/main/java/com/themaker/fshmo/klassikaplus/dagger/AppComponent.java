@@ -35,4 +35,8 @@ public interface AppComponent {
 
     void inject(CatalogPresenter presenter);
 
+    void inject(NoveltySwipeController controller);
+
+    void inject(StarDrawer drawer);
+
 }

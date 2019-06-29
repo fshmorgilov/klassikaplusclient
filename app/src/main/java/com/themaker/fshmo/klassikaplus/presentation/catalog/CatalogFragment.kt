@@ -21,6 +21,8 @@ import com.themaker.fshmo.klassikaplus.data.domain.ItemCategory
 import com.themaker.fshmo.klassikaplus.presentation.base.MvpBaseFragment
 import com.themaker.fshmo.klassikaplus.presentation.common.State
 import com.themaker.fshmo.klassikaplus.presentation.decoration.GridSpaceItemDecoration
+import com.themaker.fshmo.klassikaplus.presentation.decoration.SwipedGridSpaceItemDecoration
+import com.themaker.fshmo.klassikaplus.presentation.novelties.NoveltySwipeController
 import com.themaker.fshmo.klassikaplus.presentation.root.MainNavigationCallback
 import com.themaker.fshmo.klassikaplus.presentation.root.WebItemCallback
 import io.reactivex.disposables.Disposable
@@ -90,7 +92,9 @@ class CatalogFragment : MvpBaseFragment(), CatalogView {
             catalogAdapter.setDataset(dataset)
             adapter = catalogAdapter
             recyclerAdapter = catalogAdapter
-            addItemDecoration(GridSpaceItemDecoration(1, 1))
+            addItemDecoration(
+                GridSpaceItemDecoration( 1, 1 )
+            )
         }
     }
 
