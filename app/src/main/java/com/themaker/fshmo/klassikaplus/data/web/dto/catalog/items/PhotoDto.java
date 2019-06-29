@@ -1,4 +1,4 @@
-package com.themaker.fshmo.klassikaplus.data.web.dto.catalog;
+package com.themaker.fshmo.klassikaplus.data.web.dto.catalog.items;
 
 import java.io.Serializable;
 

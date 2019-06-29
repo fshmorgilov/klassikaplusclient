@@ -68,6 +68,11 @@ public class DbItem {
     private boolean favorite;
 
     ////------additional_fields-----------////
+    @ColumnInfo (name = "category")
+    private String category;
+
+    @ColumnInfo (name = "category_id")
+    private Integer categoryId;
     //Characteristics
     @Ignore
     private String countryManufacturer; //Страна производитель
@@ -286,6 +291,22 @@ public class DbItem {
 
     public void setExtId(@NonNull String extId) {
         this.extId = extId;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
     public boolean isFavorite() {

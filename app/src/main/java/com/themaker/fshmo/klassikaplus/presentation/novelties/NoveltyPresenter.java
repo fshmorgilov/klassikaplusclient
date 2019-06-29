@@ -17,7 +17,7 @@ import java.util.List;
 public class NoveltyPresenter extends MvpBasePresenter<NoveltyView> {
 
     private static final String TAG = NoveltyPresenter.class.getName();
-
+    // TODO: 4/26/2019 Refactor to holdData
     @Inject
     CatalogRepository repository;
 
@@ -34,7 +34,7 @@ public class NoveltyPresenter extends MvpBasePresenter<NoveltyView> {
                 .subscribe(
                         this::displayData,
                         this::displayError);
-        getViewState().addSub(subscribe);   // FIXME: 2/7/2019 возможно, не стоит
+        getViewState().addSub(subscribe);
     }
 
     private void displayError(Throwable throwable) {

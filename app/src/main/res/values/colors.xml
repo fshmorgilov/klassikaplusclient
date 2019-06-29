@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#C2113D</color>
     <color name="colorAccent">#D48B98</color>
     <color name="star_color">#C2AD11</color>
+    <color name="true_white">#ffffff</color>
 </resources>

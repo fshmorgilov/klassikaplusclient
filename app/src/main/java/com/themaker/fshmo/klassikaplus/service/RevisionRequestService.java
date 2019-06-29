@@ -69,7 +69,7 @@ public class RevisionRequestService extends Worker {
     }
 
     private void makeNotification() {
-        Intent notificationTapIntent = new Intent(context, MainActivity.class);
+        Intent notificationTapIntent = MainActivity.startWithNovelties(context);
         notificationTapIntent.setAction(ACTION_TAP);
         notificationTapIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationTapIntent, 0);

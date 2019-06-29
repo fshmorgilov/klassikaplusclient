@@ -10,4 +10,6 @@
     <dimen name="recycler_swipe_action_width">10dp</dimen>
     <dimen name="recycler_swipe_threshold">30dp</dimen>
     <dimen name="item_price_text_size">20sp</dimen>
+    <dimen name="toolbar_height">32dp</dimen>
+    <dimen name="common_button_text">16sp</dimen>
 </resources>

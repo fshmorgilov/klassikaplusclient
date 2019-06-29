@@ -1,4 +1,4 @@
-package com.themaker.fshmo.klassikaplus.data.web.dto.catalog;
+package com.themaker.fshmo.klassikaplus.data.web.dto.catalog.items;
 
 import java.io.Serializable;
 import java.util.List;
@@ -50,6 +50,13 @@ public class ItemDto implements Serializable {
     @SerializedName("photos")
     @Expose
     private List<PhotoDto> photos = null;
+    @SerializedName("category")
+    @Expose
+    private String category;
+    @SerializedName("categoryId")
+    @Expose
+    private Integer categoryId;
+
     private final static long serialVersionUID = 4022723505261094500L;
 
     public String getId() {
@@ -164,4 +171,19 @@ public class ItemDto implements Serializable {
         this.photos = photos;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
 }

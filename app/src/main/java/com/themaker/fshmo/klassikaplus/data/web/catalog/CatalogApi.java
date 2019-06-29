@@ -12,7 +12,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class CatalogApi {
 
-    // FIXME: 2/21/2019 поправить IP адресс
     private static final String url_dev = "http://192.168.0.4:63000/";
     private static final String url_test = "https://klassikaplus-test.herokuapp.com/";
 
