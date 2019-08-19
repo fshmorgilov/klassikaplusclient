@@ -31,6 +31,10 @@ public class NoveltyAdapter extends RecyclerView.Adapter<NoveltyViewHolder> {
         this.onItemClickListener = clickListener;
     }
 
+    public Item getItem(int position){
+        return dataset.get(position);
+    }
+
     @NonNull
     @Override
     public NoveltyViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
